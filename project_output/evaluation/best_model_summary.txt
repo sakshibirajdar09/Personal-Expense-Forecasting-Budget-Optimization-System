@@ -1,0 +1,12 @@
+Best model summary
+------------------
+Model: Random Forest
+MAE: 11408.764406813469
+RMSE: 37857.74018494814
+R2: 0.9729816766503188
+MAPE: 2567.331808702953
+MAE_Rank: 1.0
+RMSE_Rank: 1.0
+R2_Rank: 1.0
+MAPE_Rank: 5.0
+Overall_Score: 8.0
