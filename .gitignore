@@ -1,0 +1,28 @@
+# Ignore virtual environments
+venv/
+.env/
+
+# Ignore cache and temporary files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Ignore data and model outputs
+*.csv
+*.xlsx
+*.pkl
+*.h5
+*.sav
+*.npy
+*.npz
+
+# Ignore OS files
+.DS_Store
+
+# Ignore project build/output folders
+project_output/
+data/
+models/
+reports/
