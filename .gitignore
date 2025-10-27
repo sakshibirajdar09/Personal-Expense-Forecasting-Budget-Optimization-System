@@ -8,7 +8,12 @@ __pycache__/
 *.pyo
 *.pyd
 *.log
-
+# .gitignore
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+.env
 # Ignore data and model outputs
 *.csv
 *.xlsx
