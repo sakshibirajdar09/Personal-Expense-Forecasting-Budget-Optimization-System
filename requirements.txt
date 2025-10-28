@@ -1,4 +1,7 @@
-# Core Python utilities
+# Personal Expense Forecasting & Budget Optimization System
+# Final Deployment-Ready Requirements
+
+# === Core Python Utilities ===
 pandas==2.2.2
 numpy==1.26.4
 matplotlib==3.9.2
@@ -6,54 +9,57 @@ seaborn==0.13.2
 scikit-learn==1.5.2
 scipy==1.14.1
 
-# Time Series & Forecasting
+# === Time Series & Forecasting ===
 prophet==1.1.5
 statsmodels==0.14.2
 xgboost==2.1.1
 lightgbm==4.5.0
-tensorflow==2.17.0
-torch==2.4.1
+
+# Use lightweight version of TensorFlow (works on Streamlit Cloud)
+tensorflow-cpu==2.15.0
+
+# PyTorch Ecosystem (Optional but Stable)
+torch==2.2.2
 pytorch-lightning==2.4.0
+pytorch-forecasting==1.1.3
+pytorch-tabnet==4.1.0
+
+# === Transformers & NLP Utilities ===
 transformers==4.45.1
 datasets==3.0.2
+nltk==3.9.1
+spacy==3.8.2
 
-# Visualization & EDA
+# === Visualization & EDA ===
 plotly==5.24.0
 streamlit==1.39.0
+streamlit-lottie==0.0.5
 altair==5.4.1
 
-# Feature Engineering & Utilities
+# === Feature Engineering & Utilities ===
 category_encoders==2.6.3
 tqdm==4.66.5
 joblib==1.4.2
 pyyaml==6.0.2
+requests==2.32.3
 
-# NLP for merchant/category cleaning
-nltk==3.9.1
-spacy==3.8.2
-
-# Database (for multi-user version later)
+# === Database (for Multi-User Version) ===
 sqlalchemy==2.0.36
 pymysql==1.1.1
 
-# API (optional future phase)
+# === API (Future Phase) ===
 fastapi==0.115.0
 uvicorn==0.31.0
 
-# Cloud / Deployment
+# === Cloud / Deployment ===
 docker==7.1.0
 gunicorn==23.0.0
 
-# Testing & Linting
+# === Testing & Linting ===
 pytest==8.3.3
 flake8==7.1.1
 black==24.10.0
 
-# Logging / Monitoring
+# === Logging / Monitoring ===
 loguru==0.7.2
 
-# Optional advanced forecasting
-pytorch-forecasting==1.1.3
-pytorch-tabnet==4.1.0
-
-# pip install streamlit-lottie requests plotly
