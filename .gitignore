@@ -27,7 +27,7 @@ __pycache__/
 .DS_Store
 
 # Ignore project build/output folders
-project_output/
-data/
-models/
-reports/
+# project_output/
+# data/
+# models/
+# reports/
