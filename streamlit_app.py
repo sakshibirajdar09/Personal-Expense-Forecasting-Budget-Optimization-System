@@ -397,3 +397,5 @@ st.markdown("""
     <a href='https://www.linkedin.com/in/sakshibirajdar/' target='_blank'>LinkedIn</a>
 </div>
 """, unsafe_allow_html=True)
+
+# python -m streamlit run streamlit_app.py
