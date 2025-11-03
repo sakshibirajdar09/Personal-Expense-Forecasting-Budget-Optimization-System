@@ -90,9 +90,10 @@ with st.sidebar:
 
     st.subheader("📈 Dashboard Sections")
     section = st.radio(
-        "Select a view:",
-        ["Overview", "Forecasting (AI Models)", "Budget Optimization", "Model Comparison", "Export Reports"]
+    "Select a view:",
+    ["Overview", "Forecasting (AI Models)", "Budget Optimization", "Model Comparison", "Export Reports", "Chatbot Assistant"]
     )
+
 
 # -------------------------------
 # 🔠 CATEGORY CLEANUP FUNCTION
@@ -234,16 +235,16 @@ elif section == "Forecasting (AI Models)":
         mape = np.mean(np.abs((valid['amount'] - valid['forecast']) / valid['amount'])) * 100
 
         st.metric("📅 Next Month Forecast", f"{monthly['forecast'].iloc[-1]:,.0f} ₹")
-        st.write(f"**MAE:** {mae:,.0f} | **RMSE:** {rmse:,.0f} | **R²:** {r2:.3f} | **MAPE:** {mape:.2f}%")
+        st.write(f"*MAE:* {mae:,.0f} | *RMSE:* {rmse:,.0f} | *R²:* {r2:.3f} | *MAPE:* {mape:.2f}%")
 
         # 🧠 AI Insights Summary
         diff = monthly['forecast'].iloc[-1] - monthly['amount'].iloc[-2]
         st.markdown("### 🧠 Smart Insights")
         if diff > 0:
-            st.info(f"📈 Your expenses are projected to increase by **₹{abs(diff):,.0f}** next month. "
+            st.info(f"📈 Your expenses are projected to increase by *₹{abs(diff):,.0f}* next month. "
                     f"Consider reviewing high-cost categories to stay within budget.")
         else:
-            st.success(f"📉 Great! Your expenses may decrease by **₹{abs(diff):,.0f}** next month. "
+            st.success(f"📉 Great! Your expenses may decrease by *₹{abs(diff):,.0f}* next month. "
                        f"Keep maintaining your current saving habits!")
 
         # Save model results
@@ -294,7 +295,7 @@ elif section == "Model Comparison":
 
     results_path = "project_output/model_results.csv"
     if not os.path.exists(results_path):
-        st.error("⚠️ Model results not found! Please run Forecasting first.")
+        st.error("⚠ Model results not found! Please run Forecasting first.")
         st.stop()
 
     df_results = pd.read_csv(results_path)
@@ -302,7 +303,7 @@ elif section == "Model Comparison":
     st.dataframe(df_results.style.format({"MAE": "{:,.0f}", "RMSE": "{:,.0f}", "R2": "{:.3f}", "MAPE": "{:.2f}"}))
 
     best_model = df_results.loc[df_results['R2'].idxmax(), 'Model']
-    st.success(f"🏆 Best Performing Model: **{best_model}**")
+    st.success(f"🏆 Best Performing Model: *{best_model}*")
 
     metrics = ['MAE', 'RMSE', 'R2', 'MAPE']
     for metric in metrics:
@@ -350,10 +351,45 @@ elif section == "Export Reports":
     st.success("✅ Reports ready for download!")
 
 # -------------------------------
+# 💬 6️⃣ CHATBOT ASSISTANT (GROQ VERSION)
+# -------------------------------
+elif section == "Chatbot Assistant":
+    st.header("💬 AI Expense Chatbot Assistant")
+
+    import os
+    from dotenv import load_dotenv
+    from langchain_core.prompts import ChatPromptTemplate
+    from langchain_groq import ChatGroq
+
+    # Load API key
+    load_dotenv()
+    groq_api_key = os.getenv("GROQ_API_KEY")
+
+    if not groq_api_key:
+        st.warning("⚠ Please add your Groq API key in a .env file as GROQ_API_KEY.")
+        st.stop()
+
+    # Initialize Groq LLM
+    llm = ChatGroq(model="llama-3.1-8b-instant", api_key=groq_api_key)
+
+    st.markdown("Type your question about your expenses, forecasting, or budget optimization 👇")
+
+    user_input = st.text_input("You:", placeholder="e.g., How can I save more from my monthly salary?")
+
+    if user_input:
+        prompt = ChatPromptTemplate.from_messages([
+            ("system", "You are a smart financial assistant. Help users analyze expenses and give budget improvement tips."),
+            ("human", user_input)
+        ])
+        chain = prompt | llm
+        response = chain.invoke({})
+        st.success(response.content)
+
+# -------------------------------
 # 🏁 END + ABOUT SECTION
 # -------------------------------
 st.markdown("---")
-st.caption("Built with ❤️ using Streamlit, Prophet, XGBoost & Plotly | © 2025 Personal Expense Forecasting System")
+st.caption("Built with ❤ using Streamlit, Prophet, XGBoost & Plotly | © 2025 Personal Expense Forecasting System")
 st.markdown("""
 <div style='text-align:center;'>
     <b>👩‍💻 Developed by:</b> Sakshi Birajdar <br>
@@ -361,3 +397,5 @@ st.markdown("""
     <a href='https://www.linkedin.com/in/sakshibirajdar/' target='_blank'>LinkedIn</a>
 </div>
 """, unsafe_allow_html=True)
+
+# python -m streamlit run streamlit_app.py
