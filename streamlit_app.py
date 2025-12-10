@@ -26,26 +26,42 @@ st.set_page_config(
     page_icon="💰"
 )
 
+# -----------------------------------------
+# ✅ FIX 1 — Function to safely clean numbers
+# -----------------------------------------
+def clean_amount(x):
+    if pd.isna(x):
+        return 0
+    x = str(x)
+    x = x.replace("₹", "").replace(",", "").replace(" ", "")
+    x = x.replace("−", "-")  # special negative symbol fix
+    if x.startswith(".-"):
+        x = "-" + x[2:]
+    if x.startswith("-."):
+        x = "-" + x[2:]
+    if x.startswith("."):
+        x = x[1:]
+    try:
+        return float(x)
+    except:
+        return 0  # fallback safety
+
 # -------------------------------
 # 🌈 CUSTOM THEME / CSS
 # -------------------------------
 st.markdown("""
     <style>
-    /* Global Background */
     .stApp {
         background-color: #f7f9fc;
         font-family: "Poppins", sans-serif;
     }
-    /* Headers */
     h1, h2, h3, h4 {
         color: #2b2b2b;
     }
-    /* Success color */
     .stSuccess {
         background-color: #e7f9ed !important;
         border-left: 5px solid #3CCF4E !important;
     }
-    /* Buttons */
     div.stDownloadButton button {
         background: linear-gradient(90deg, #00c6ff, #0072ff);
         color: white;
@@ -61,7 +77,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # -------------------------------
-# 🎬 LOAD LOTTIE ANIMATION
+# 🎬 LOAD LOTTIE
 # -------------------------------
 def load_lottie_url(url: str):
     r = requests.get(url)
@@ -72,7 +88,7 @@ def load_lottie_url(url: str):
 lottie_finance = load_lottie_url("https://assets7.lottiefiles.com/packages/lf20_jcikwtux.json")
 
 # -------------------------------
-# 🎬 ANIMATED HEADER
+# 🎬 HEADER
 # -------------------------------
 col_anim, col_title = st.columns([1, 3])
 with col_anim:
@@ -90,10 +106,9 @@ with st.sidebar:
 
     st.subheader("📈 Dashboard Sections")
     section = st.radio(
-    "Select a view:",
-    ["Overview", "Forecasting (AI Models)", "Budget Optimization", "Model Comparison", "Export Reports", "Chatbot Assistant"]
+        "Select a view:",
+        ["Overview", "Forecasting (AI Models)", "Budget Optimization", "Model Comparison", "Export Reports", "Chatbot Assistant"]
     )
-
 
 # -------------------------------
 # 🔠 CATEGORY CLEANUP FUNCTION
@@ -133,22 +148,39 @@ else:
 # -------------------------------
 if section != "Model Comparison":
     df.columns = df.columns.str.strip().str.lower()
+
     if 'amount' not in df.columns:
         st.error("The dataset must contain an 'amount' column.")
         st.stop()
 
+    # ✅ FIX 2 — Clean the amount column
+    df['amount'] = df['amount'].apply(clean_amount)
+
+    # DATE HANDLING
     if 'date' in df.columns:
         df['date'] = pd.to_datetime(df['date'], errors='coerce')
         df['year_month'] = df['date'].dt.to_period('M').astype(str)
     elif 'year_month' not in df.columns:
         df['year_month'] = [f"2025-{(i%12)+1:02d}" for i in range(len(df))]
 
+    # CATEGORY
     if 'category' not in df.columns:
         df['category'] = 'General'
 
     with st.spinner("🧠 Cleaning and normalizing categories..."):
         df['category'] = df['category'].apply(clean_category)
+
     st.success("✅ Categories standardized successfully!")
+
+# -------------------------------
+# REST OF YOUR CODE (UNCHANGED)
+# -------------------------------
+
+# EVERYTHING BELOW REMAINS EXACTLY THE SAME AS YOU PROVIDED.
+# (I am not pasting again to avoid flooding)
+# Your entire Overview, Forecasting, Model Comparison,
+# Optimization, Report Export & Chatbot code stays as-is.
+
 
 # -------------------------------
 # 1️⃣ OVERVIEW SECTION
